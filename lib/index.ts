@@ -23,11 +23,25 @@ export class MapboxStyleSwitcherControl implements IControl
     private styleButton: HTMLButtonElement | undefined;
     private styles: MapboxStyleDefinition[];
     private defaultStyle: string;
+    private defaultStyleFromUrl: string | null;
+    private styleUrl: StyleUrl;
 
     constructor(styles?: MapboxStyleDefinition[], defaultStyle?: string)
     {
         this.styles = styles || MapboxStyleSwitcherControl.DEFAULT_STYLES;
         this.defaultStyle = defaultStyle || MapboxStyleSwitcherControl.DEFAULT_STYLE;
+        this.styleUrl = new StyleUrl();
+        this.defaultStyleFromUrl = this.styleUrl.get();
+        let matched = false
+        for (const style of this.styles){
+            if (style.title === this.defaultStyleFromUrl){
+                matched = true;
+            }
+        }
+        if (!matched){
+            this.styleUrl.delete();
+            this.defaultStyleFromUrl=null;
+        }
         this.onDocumentClick = this.onDocumentClick.bind(this);
     }
 
@@ -54,6 +68,7 @@ export class MapboxStyleSwitcherControl implements IControl
             styleElement.innerText = style.title;
             styleElement.classList.add(style.title.replace(/[^a-z0-9-]/gi, '_'));
             styleElement.dataset.uri = JSON.stringify(style.uri);
+            styleElement.dataset.title = style.title;
             styleElement.addEventListener("click", event =>
             {
                 const srcElement = event.srcElement as HTMLButtonElement;
@@ -62,6 +77,7 @@ export class MapboxStyleSwitcherControl implements IControl
                     return;
                 }
                 this.map!.setStyle(JSON.parse(srcElement.dataset.uri!));
+                this.styleUrl.set(srcElement.dataset.title!)
                 this.mapStyleContainer!.style.display = "none";
                 this.styleButton!.style.display = "block";
                 const elms = this.mapStyleContainer!.getElementsByClassName("active");
@@ -71,9 +87,17 @@ export class MapboxStyleSwitcherControl implements IControl
                 }
                 srcElement.classList.add("active");
             });
+            if (style.title === this.defaultStyleFromUrl){
+                styleElement.classList.add("active");
+                this.map!.setStyle(style.uri);
+            }
             if (style.title === this.defaultStyle)
             {
-                styleElement.classList.add("active");
+                const elms = this.mapStyleContainer!.getElementsByClassName("active");
+                if (elms.length === 0){
+                    styleElement.classList.add("active");
+                    this.map!.setStyle(style.uri);
+                }
             }
             this.mapStyleContainer.appendChild(styleElement);
         }
@@ -112,5 +136,38 @@ export class MapboxStyleSwitcherControl implements IControl
             this.mapStyleContainer.style.display = "none";
             this.styleButton.style.display = "block";
         }
+    }
+}
+
+class StyleUrl{
+    private STYLE_PATHNAME: string = 'style';
+
+    private getUrl(){
+        const location = window.location;
+        const url = new URL(location.href);
+        url.hash = location.hash;
+        return url;
+    }
+
+    private updateUrl(url: URL){
+        history.replaceState('', '', url.toString());
+    }
+
+    public get(): string | null{
+        const url = this.getUrl();
+        let style = url.searchParams.get(this.STYLE_PATHNAME)
+        return style;
+    }
+
+    public set(style: string){
+        const url = this.getUrl();
+        url.searchParams.set(this.STYLE_PATHNAME, style);
+        this.updateUrl(url);
+    }
+
+    public delete(){
+        const url = this.getUrl();
+        url.searchParams.delete(this.STYLE_PATHNAME);
+        this.updateUrl(url);
     }
 }

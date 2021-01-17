@@ -4,25 +4,26 @@ import "../styles.css"
 
 
 (() => {
+    const styles: MapboxStyleDefinition[] = [
+        {
+            title: "UNVT Original",
+            uri:"https://optgeo.github.io/kokoromi-rw/style.json"
+        },
+        {
+            title: "UNVT(WASAC)",
+            uri:"https://wasac.github.io/mapbox-stylefiles/unvt/style.json"
+        }
+    ];
+    const defaultStyle = styles[1];
+
     const map = new mapboxgl.Map({
         container: 'map',
-        style:'https://optgeo.github.io/kokoromi-rw/style.json',
+        style: defaultStyle.uri,
         center: [29.898, -2.054],
         zoom: 9,
         hash:true,
     });
     
-    const styles: MapboxStyleDefinition[] = [
-        {
-            title: "UNVT",
-            uri:"https://optgeo.github.io/kokoromi-rw/style.json"
-        },
-        {
-            title: "UNVT with Water",
-            uri:"https://wasac.github.io/mapbox-stylefiles/unvt/style.json"
-        }
-    ];
-    
-    map.addControl(new MapboxStyleSwitcherControl(styles));
+    map.addControl(new MapboxStyleSwitcherControl(styles, defaultStyle.title));
     
 })();
