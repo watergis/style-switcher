@@ -1,9 +1,13 @@
 {
-  "name": "mapbox-gl-style-switcher",
+  "name": "@watergis/mapbox-gl-style-switcher",
   "version": "1.0.9",
   "description": "Mapbox GL JS Style Switcher",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "styles.css"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "webpack serve --mode development --open --hot --inline --config webpack.config.js",
@@ -11,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/el/style-switcher.git"
+    "url": "git+https://github.com/watergis/style-switcher.git"
   },
   "keywords": [
     "mapbox",
@@ -23,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/el/style-switcher/issues"
   },
-  "homepage": "https://github.com/el/style-switcher#readme",
+  "homepage": "https://github.com/watergis/style-switcher#readme",
   "dependencies": {
     "mapbox-gl": "^1.13.0"
   },
