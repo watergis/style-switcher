@@ -18,11 +18,11 @@ import "../styles.css"
             uri:"https://optgeo.github.io/kokoromi-rw/style.json"
         },
         {
-            title: "UNVT with Water",
+            title: "UNVT2",
             uri:"https://wasac.github.io/mapbox-stylefiles/unvt/style.json"
         }
     ];
     
-    map.addControl(new MapboxStyleSwitcherControl(styles));
+    map.addControl(new MapboxStyleSwitcherControl(styles, 'UNVT2'));
     
 })();

@@ -23,11 +23,22 @@ export class MapboxStyleSwitcherControl implements IControl
     private styleButton: HTMLButtonElement | undefined;
     private styles: MapboxStyleDefinition[];
     private defaultStyle: string;
+    private defaultStyleFromUrl: string | null;
 
     constructor(styles?: MapboxStyleDefinition[], defaultStyle?: string)
     {
         this.styles = styles || MapboxStyleSwitcherControl.DEFAULT_STYLES;
         this.defaultStyle = defaultStyle || MapboxStyleSwitcherControl.DEFAULT_STYLE;
+        this.defaultStyleFromUrl = this.getStyleFromUrl();
+        let matched = false
+        for (const style of this.styles){
+            if (style.uri === this.defaultStyleFromUrl){
+                matched = true;
+            }
+        }
+        if (!matched){
+            this.deleteStyleFromUrl();
+        }
         this.onDocumentClick = this.onDocumentClick.bind(this);
     }
 
@@ -62,6 +73,7 @@ export class MapboxStyleSwitcherControl implements IControl
                     return;
                 }
                 this.map!.setStyle(JSON.parse(srcElement.dataset.uri!));
+                this.setStyleToUrl(JSON.parse(srcElement.dataset.uri!))
                 this.mapStyleContainer!.style.display = "none";
                 this.styleButton!.style.display = "block";
                 const elms = this.mapStyleContainer!.getElementsByClassName("active");
@@ -71,9 +83,17 @@ export class MapboxStyleSwitcherControl implements IControl
                 }
                 srcElement.classList.add("active");
             });
+            if (style.uri === this.defaultStyleFromUrl){
+                styleElement.classList.add("active");
+                this.map!.setStyle(style.uri);
+            }
             if (style.title === this.defaultStyle)
             {
-                styleElement.classList.add("active");
+                const elms = this.mapStyleContainer!.getElementsByClassName("active");
+                if (elms.length === 0){
+                    styleElement.classList.add("active");
+                    this.map!.setStyle(style.uri);
+                }
             }
             this.mapStyleContainer.appendChild(styleElement);
         }
@@ -112,5 +132,28 @@ export class MapboxStyleSwitcherControl implements IControl
             this.mapStyleContainer.style.display = "none";
             this.styleButton.style.display = "block";
         }
+    }
+
+    private setStyleToUrl(style: string){
+        const location = window.location;
+        const url = new URL(location.href);
+        url.hash = location.hash;
+        url.searchParams.set("style", style);
+        history.replaceState('', '', url.toString());
+    }
+
+    private getStyleFromUrl(): string | null{
+        const url = new URL(window.location.href);
+        let style = url.searchParams.get('style')
+        return style;
+    }
+
+    private deleteStyleFromUrl(){
+        const location = window.location;
+        const url = new URL(location.href);
+        url.hash = location.hash;
+        url.searchParams.delete('style');
+        history.replaceState('', '', url.toString());
+        this.defaultStyleFromUrl=null;
     }
 }
