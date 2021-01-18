@@ -2,13 +2,13 @@
 
 Adds a style switcher to `mapbox-gl`
 
-![](https://img.shields.io/bundlephobia/min/mapbox-gl-style-switcher) <a href="https://www.npmjs.com/package/mapbox-gl-style-switcher">![](https://img.shields.io/npm/v/mapbox-gl-style-switcher)</a> ![](https://img.shields.io/npm/types/mapbox-gl-style-switcher) ![](https://img.shields.io/npm/l/mapbox-gl-style-switcher) 
+![](https://img.shields.io/bundlephobia/min/@watergis/mapbox-gl-style-switcher) <a href="https://www.npmjs.com/package/@watergis/mapbox-gl-style-switcher">![](https://img.shields.io/npm/v/@watergis/mapbox-gl-style-switcher)</a> ![](https://img.shields.io/npm/types/@watergis/mapbox-gl-style-switcher) ![](https://img.shields.io/npm/l/@watergis/mapbox-gl-style-switcher) 
 
 
 ## Installation:
 
 ```bash
-npm i mapbox-gl-style-switcher --save
+npm i @watergis/mapbox-gl-style-switcher --save
 ```
 
 ## Demo:
@@ -18,10 +18,10 @@ npm i mapbox-gl-style-switcher --save
 ## Usage:
 
 ```ts
-import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
+import { MapboxStyleSwitcherControl } from "@watergis/mapbox-gl-style-switcher";
 import { Map as MapboxMap } from "mapbox-gl";
 
-import "mapbox-gl-style-switcher/styles.css";
+import "@watergis/mapbox-gl-style-switcher/styles.css";
 
 const map = new MapboxMap();
 map.addControl(new MapboxStyleSwitcherControl());
@@ -31,7 +31,7 @@ map.addControl(new MapboxStyleSwitcherControl());
 If you want to supply your own list of styles, pass them in the constructor.
 
 ```ts
-import { MapboxStyleDefinition, MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
+import { MapboxStyleDefinition, MapboxStyleSwitcherControl } from "@watergis/mapbox-gl-style-switcher";
 
 const styles: MapboxStyleDefinition[] = [
     {
@@ -58,3 +58,14 @@ map.addControl(new MapboxStyleSwitcherControl(styles, 'Dark'));
 ![Closed](assets/closed.png)
 
 ![Open](assets/open.png)
+
+# Development
+
+```
+# install npm packages
+npm i
+# build source code
+npm run build
+# launch application with server
+npm run dev
+```
