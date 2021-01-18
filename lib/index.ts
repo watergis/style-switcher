@@ -88,10 +88,13 @@ export class MapboxStyleSwitcherControl implements IControl
                 srcElement.classList.add("active");
             });
             if (style.title === this.defaultStyleFromUrl){
-                styleElement.classList.add("active");
-                this.map!.setStyle(style.uri);
+                const elms = this.mapStyleContainer!.getElementsByClassName("active");
+                if (elms.length === 0){
+                    styleElement.classList.add("active");
+                    this.map!.setStyle(style.uri);
+                }
             }
-            if (style.title === this.defaultStyle)
+            if (!this.defaultStyleFromUrl && style.title === this.defaultStyle)
             {
                 const elms = this.mapStyleContainer!.getElementsByClassName("active");
                 if (elms.length === 0){
