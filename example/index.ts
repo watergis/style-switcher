@@ -14,7 +14,7 @@ import "../styles.css"
             uri:"https://wasac.github.io/mapbox-stylefiles/unvt/style.json"
         }
     ];
-    const defaultStyle = styles[1];
+    const defaultStyle = styles[0];
 
     const map = new mapboxgl.Map({
         container: 'map',
